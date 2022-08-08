@@ -29,4 +29,13 @@
       Send 1 TCRO
     </button>
   </div>
+
+  <div *ngIf="txHash" class="col-md-12 my-5">
+    <div class="d-flex justify-content-center">
+      <h2>Transaction Hash</h2>
+    </div>
+    <div class="d-flex justify-content-center">
+      <p>{{ txHash }}</p>
+    </div>
+  </div>
 </div>

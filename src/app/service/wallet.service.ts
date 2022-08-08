@@ -74,6 +74,7 @@ export class WalletService {
   transactionHandler = async () => {
     if (window.ethereum) {
       console.log(this.metamaskAddress);
+      let txHash = '';
       let params = [
         {
           from: this.metamaskAddress,
@@ -88,17 +89,21 @@ export class WalletService {
           method: 'eth_sendTransaction',
           params,
         })
-        .then((res: any) => {
-          return res;
+        .then((res: string) => {
+          console.log(res);
+          txHash = res;
+          // return res;
         })
         .catch((err: any) => {
           console.log(err);
-          return null;
+          return 'Error';
         });
-    } else alert('Please Instal MetaMask in your browser');
+
+      return txHash;
+    } else return '0';
   };
 
-  getBalanceFromMarcel() {}
+  // getBalanceFromMarcel() {}
 
   // loadMetamask = async () => {
   //   if (window.ethereum !== undefined) {

@@ -11,6 +11,7 @@ export class AppComponent implements OnInit {
   title = 'WalletApp';
   balance: string = '';
   userWalletAddress: string = '';
+  txHash: string = '';
   isTransactionPending: boolean = false;
   isLoaded: boolean = false;
 
@@ -27,19 +28,11 @@ export class AppComponent implements OnInit {
     // this.getAddressFromService();
   }
 
-  handleTransaction() {
+  handleTransaction = async () => {
     this.isTransactionPending = true;
     // console.log('Pending');
-    this._walletService
-      .transactionHandler()
-      .then((res) => {
-        console.log(res);
-        this.isTransactionPending = false;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+    this.txHash = await this._walletService.transactionHandler();
+  };
 
   // getAddressFromService = async () => {
   //   // console.log(await this._walletService.getMetamaskAddress());
