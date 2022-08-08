@@ -3,8 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
 };
+
+export const WEB3_TESTNET_PROVIDER = 'https://evm-t3.cronos.org/';
 
 /*
  * For easier debugging in development mode, you can import the following file
