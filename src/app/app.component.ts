@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { async } from '@angular/core/testing';
+import { FormControl, FormGroup } from '@angular/forms';
 import { WalletService } from './service/wallet.service';
+import { addressInputValidator } from './shared/forbiden-input.directive';
+import { ValidateAddressInput } from './shared/validate-address-input.directive';
 
 @Component({
   selector: 'app-root',
@@ -14,24 +17,47 @@ export class AppComponent implements OnInit {
   txHash: string = '';
   isTransactionPending: boolean = false;
   isLoaded: boolean = false;
+  targetAddress?: string;
+  form: any;
 
   // window: any;
   constructor(private _walletService: WalletService) {}
   ngOnInit() {
     console.log(this._walletService.checkMetamaskStatus());
+    if (!this.balance) this.getData();
+    setInterval(() => {
+      if (this.balance) {
+        this.getData();
+        console.log(this.balance);
+      }
+    }, 5000);
+
+    // this.form = new FormGroup({
+    //   address: new FormControl(this.targetAddress, [
+    //     addressInputValidator(/^0x([A-Fa-f0-9]{64})$/),
+    //   ]),
+    // });
+    // this.getAddressFromService();
+  }
+
+  getData() {
     this._walletService.getWalletBalance().then((res) => {
       // console.log(res);
       this.balance = res.formattedBallance;
       this.userWalletAddress = res.currentAddress;
       this.isLoaded = true;
     });
-    // this.getAddressFromService();
   }
 
-  handleTransaction = async () => {
+  handleTransaction = async (targetAddress?: typeof this.targetAddress) => {
     this.isTransactionPending = true;
     // console.log('Pending');
-    this.txHash = await this._walletService.transactionHandler();
+    this.txHash = await this._walletService.transactionHandler(targetAddress);
+    this.isTransactionPending = false;
+    // this.getData();
+    // setTimeout(() => {
+    //   location.reload();
+    // }, 3000);
   };
 
   // getAddressFromService = async () => {

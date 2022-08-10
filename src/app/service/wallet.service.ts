@@ -71,14 +71,15 @@ export class WalletService {
     return { formattedBallance, currentAddress };
   };
 
-  transactionHandler = async () => {
+  transactionHandler = async (toAddress?: string) => {
     if (window.ethereum) {
       console.log(this.metamaskAddress);
       let txHash = '';
       let params = [
         {
           from: this.metamaskAddress,
-          to: '0x8f9bfD0aADA01393D04B06B1CF58863963a25beD',
+          // to: '0x8f9bfD0aADA01393D04B06B1CF58863963a25beD',
+          to: toAddress,
           gas: '0x76c0',
           gasPrice: '0x9184e72a000',
           value: '0xDE0B6B3A7640000',
