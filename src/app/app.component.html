@@ -30,24 +30,40 @@
       Send 1 TCRO
     </button> -->
     <div class="col-md-7">
-      <div class="input-group form-contorl">
+      <div class="d-flex justify-content-center">
+        <h5>Send To</h5>
+      </div>
+      <div class="form-contorl">
         <input
           type="text"
-          class="form-control"
+          class="form-control my-2"
           placeholder="Targeted wallet address"
-          aria-label="Targeted wallet address"
-          aria-describedby="button-addon2"
           [(ngModel)]="targetAddress"
         />
-        <button
-          [disabled]="isTransactionPending"
-          (click)="handleTransaction(targetAddress)"
-          class="btn btn-primary"
-          type="button"
-          id="button-addon2"
-        >
-          Send TCRO
-        </button>
+
+        <div class="d-flex justify-content-center">
+          <div class="input-group mb-2 w-50">
+            <input
+              type="number"
+              aria-describedby="amount"
+              [min]="0"
+              id="amount"
+              class="form-control"
+              placeholder="0.1"
+              [(ngModel)]="targetAmount"
+            />
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center">
+          <button
+            [disabled]="!targetAddress || !targetAmount || isTransactionPending"
+            (click)="handleTransaction(targetAddress, targetAmount)"
+            class="btn btn-primary"
+          >
+            Send Transaction
+          </button>
+        </div>
       </div>
       <br />
     </div>

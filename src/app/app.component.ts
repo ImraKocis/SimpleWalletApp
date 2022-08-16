@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { async } from '@angular/core/testing';
+import { async, flush } from '@angular/core/testing';
 import { FormControl, FormGroup } from '@angular/forms';
 import { WalletService } from './service/wallet.service';
 import { addressInputValidator } from './shared/forbiden-input.directive';
@@ -18,9 +18,10 @@ export class AppComponent implements OnInit {
   isTransactionPending: boolean = false;
   isLoaded: boolean = false;
   targetAddress?: string;
+  targetAmount?: number;
   form: any;
+  isError: boolean = true;
 
-  // window: any;
   constructor(private _walletService: WalletService) {}
   ngOnInit() {
     console.log(this._walletService.checkMetamaskStatus());
@@ -31,7 +32,7 @@ export class AppComponent implements OnInit {
         console.log(this.balance);
       }
     }, 5000);
-
+    this.test();
     // this.form = new FormGroup({
     //   address: new FormControl(this.targetAddress, [
     //     addressInputValidator(/^0x([A-Fa-f0-9]{64})$/),
@@ -49,15 +50,30 @@ export class AppComponent implements OnInit {
     });
   }
 
-  handleTransaction = async (targetAddress?: typeof this.targetAddress) => {
-    this.isTransactionPending = true;
-    // console.log('Pending');
-    this.txHash = await this._walletService.transactionHandler(targetAddress);
-    this.isTransactionPending = false;
-    // this.getData();
-    // setTimeout(() => {
-    //   location.reload();
-    // }, 3000);
+  handleTransaction = async (
+    targetAddress?: typeof this.targetAddress,
+    targetAmount?: typeof this.targetAmount
+  ) => {
+    if (targetAddress?.match(/^0x[a-fA-F0-9]{40}$/g) && targetAmount! > 0) {
+      this.isTransactionPending = true;
+
+      this.txHash = await this._walletService.web3TransactionHandler(
+        targetAddress,
+        targetAmount
+      );
+      this.isTransactionPending = false;
+    } else {
+      alert('Please enter correct address and amount!');
+    }
+  };
+
+  handleCustomTokenTransaction(
+    targetAddress?: typeof this.targetAddress,
+    targetAmount?: typeof this.targetAmount
+  ) {}
+
+  test = async () => {
+    await this._walletService.web3CustomTokenTransactionHandler();
   };
 
   // getAddressFromService = async () => {
